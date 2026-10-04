@@ -1,0 +1,549 @@
+'use client';
+
+import { useState, useEffect, useCallback } from 'react';
+import { 
+  Image as ImageIcon, 
+  Plus, 
+  Trash2, 
+  Edit3, 
+  Eye, 
+  EyeOff, 
+  X, 
+  Loader2, 
+  Sparkles,
+  ExternalLink
+} from 'lucide-react';
+import { 
+  collection, 
+  getDocs, 
+  doc, 
+  addDoc, 
+  updateDoc, 
+  deleteDoc, 
+  serverTimestamp, 
+  query, 
+  orderBy 
+} from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import { GalleryItem } from '@/types';
+import { useToast } from '@/components/ui/toast-provider';
+import CustomAlertDialog from '@/components/ui/custom-dialog';
+import Image from 'next/image';
+
+interface ExtendedGalleryItem extends GalleryItem {
+  category?: string;
+}
+
+const defaultPhotos: ExtendedGalleryItem[] = [
+  {
+    id: 'gal-1',
+    image: '/background.jpg',
+    title: 'Main Workout Floor & Free Iron',
+    category: 'Training Floor',
+    alt: 'Main gym floor with barbell and dumbbell equipment',
+    active: true,
+    displayOrder: 1,
+  },
+  {
+    id: 'gal-2',
+    image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=800&q=80',
+    title: 'Advanced Cardio Theater',
+    category: 'Cardio',
+    alt: 'State of the art treadmills and stationary bikes',
+    active: true,
+    displayOrder: 2,
+  },
+  {
+    id: 'gal-3',
+    image: 'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&w=800&q=80',
+    title: 'Heavy Strength & Power Rack Arena',
+    category: 'Strength',
+    alt: 'Olympic barbell racks and bench stations',
+    active: true,
+    displayOrder: 3,
+  },
+  {
+    id: 'gal-4',
+    image: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=800&q=80',
+    title: 'Functional Turf & Agility Zone',
+    category: 'Conditioning',
+    alt: 'Functional conditioning turf with kettlebells',
+    active: true,
+    displayOrder: 4,
+  },
+];
+
+export default function AdminGallery() {
+  const [photos, setPhotos] = useState<ExtendedGalleryItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentPhoto, setCurrentPhoto] = useState<Partial<ExtendedGalleryItem> | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+
+  // Delete
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [photoToDelete, setPhotoToDelete] = useState<ExtendedGalleryItem | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const toast = useToast();
+
+  const fetchPhotos = useCallback(async () => {
+    try {
+      const q = query(collection(db, 'gallery'), orderBy('displayOrder', 'asc'));
+      const snapshot = await getDocs(q);
+      const items = snapshot.docs.map((d) => ({ id: d.id, ...d.data() } as ExtendedGalleryItem));
+
+      let local: ExtendedGalleryItem[] = [];
+      try {
+        local = JSON.parse(localStorage.getItem('local_gallery') || '[]');
+      } catch (e) {
+        // ignore
+      }
+
+      if (items.length === 0 && local.length === 0) {
+        setPhotos(defaultPhotos);
+      } else {
+        const map = new Map<string, ExtendedGalleryItem>();
+        defaultPhotos.forEach((p) => map.set(p.id!, p));
+        local.forEach((p) => map.set(p.id!, p));
+        items.forEach((p) => map.set(p.id!, p));
+        setPhotos(Array.from(map.values()));
+      }
+    } catch (err: any) {
+      console.warn('Firestore gallery fetch note:', err?.message);
+      try {
+        const local = JSON.parse(localStorage.getItem('local_gallery') || '[]');
+        setPhotos(local.length > 0 ? local : defaultPhotos);
+      } catch (e) {
+        setPhotos(defaultPhotos);
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchPhotos();
+    }, 0);
+    return () => clearTimeout(timer);
+  }, [fetchPhotos]);
+
+  // Add
+  const handleOpenAdd = () => {
+    setCurrentPhoto({
+      title: '',
+      category: 'Gym Floor',
+      image: '/background.jpg',
+      alt: '',
+      active: true,
+      displayOrder: photos.length + 1,
+    });
+    setIsModalOpen(true);
+  };
+
+  // Edit
+  const handleOpenEdit = (photo: ExtendedGalleryItem) => {
+    setCurrentPhoto({ ...photo });
+    setIsModalOpen(true);
+  };
+
+  // Save
+  const handleSavePhoto = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!currentPhoto?.title?.trim() || !currentPhoto?.image?.trim()) {
+      toast.warning('Title and image URL are required.');
+      return;
+    }
+
+    setIsSaving(true);
+    const isEdit = Boolean(currentPhoto.id && !currentPhoto.id.startsWith('gal-'));
+
+    try {
+      if (isEdit && currentPhoto.id) {
+        const docRef = doc(db, 'gallery', currentPhoto.id);
+        await updateDoc(docRef, {
+          title: currentPhoto.title.trim(),
+          category: currentPhoto.category?.trim() || 'General',
+          image: currentPhoto.image.trim(),
+          alt: currentPhoto.alt?.trim() || currentPhoto.title.trim(),
+          active: currentPhoto.active ?? true,
+          updatedAt: serverTimestamp(),
+        });
+
+        setPhotos((prev) =>
+          prev.map((p) =>
+            p.id === currentPhoto.id ? ({ ...p, ...currentPhoto } as ExtendedGalleryItem) : p
+          )
+        );
+        toast.success(`Photo "${currentPhoto.title}" updated!`);
+      } else {
+        const newRecord: ExtendedGalleryItem = {
+          title: currentPhoto.title.trim(),
+          category: currentPhoto.category?.trim() || 'General',
+          image: currentPhoto.image.trim(),
+          alt: currentPhoto.alt?.trim() || currentPhoto.title.trim(),
+          active: currentPhoto.active ?? true,
+          displayOrder: currentPhoto.displayOrder || photos.length + 1,
+        };
+
+        try {
+          const docRef = await addDoc(collection(db, 'gallery'), {
+            ...newRecord,
+            createdAt: serverTimestamp(),
+          });
+          newRecord.id = docRef.id;
+        } catch (dbErr) {
+          newRecord.id = `local-gal-${Date.now()}`;
+          const local = JSON.parse(localStorage.getItem('local_gallery') || '[]');
+          localStorage.setItem('local_gallery', JSON.stringify([newRecord, ...local]));
+        }
+
+        setPhotos((prev) => [...prev, newRecord]);
+        toast.success(`New photo "${newRecord.title}" added to gallery!`);
+      }
+
+      setIsModalOpen(false);
+      setCurrentPhoto(null);
+    } catch (err: any) {
+      toast.error(err?.message || 'Failed to save photo.');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  // Delete
+  const handleDeleteClick = (photo: ExtendedGalleryItem) => {
+    setPhotoToDelete(photo);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!photoToDelete) return;
+    setIsDeleting(true);
+
+    try {
+      if (photoToDelete.id && !photoToDelete.id.startsWith('gal-') && !photoToDelete.id.startsWith('local-gal-')) {
+        await deleteDoc(doc(db, 'gallery', photoToDelete.id));
+      } else if (photoToDelete.id?.startsWith('local-gal-')) {
+        const local = JSON.parse(localStorage.getItem('local_gallery') || '[]');
+        const updated = local.filter((p: ExtendedGalleryItem) => p.id !== photoToDelete.id);
+        localStorage.setItem('local_gallery', JSON.stringify(updated));
+      }
+
+      setPhotos((prev) => prev.filter((p) => p.id !== photoToDelete.id));
+      toast.success(`Photo removed from gallery.`);
+      setDeleteDialogOpen(false);
+      setPhotoToDelete(null);
+    } catch (err: any) {
+      toast.error(err?.message || 'Could not delete photo.');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  // Toggle active
+  const handleToggleActive = async (photo: ExtendedGalleryItem) => {
+    const updatedStatus = !photo.active;
+    try {
+      if (photo.id && !photo.id.startsWith('gal-') && !photo.id.startsWith('local-gal-')) {
+        await updateDoc(doc(db, 'gallery', photo.id), {
+          active: updatedStatus,
+          updatedAt: serverTimestamp(),
+        });
+      }
+      setPhotos((prev) =>
+        prev.map((p) => (p.id === photo.id ? { ...p, active: updatedStatus } : p))
+      );
+      toast.info(updatedStatus ? `Photo is now visible.` : `Photo hidden from gallery.`);
+    } catch (err: any) {
+      setPhotos((prev) =>
+        prev.map((p) => (p.id === photo.id ? { ...p, active: updatedStatus } : p))
+      );
+    }
+  };
+
+  return (
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2 text-brand-green text-[10px] font-black uppercase tracking-widest">
+            <ImageIcon className="w-3.5 h-3.5" /> Media & Showcase
+          </div>
+          <h1 className="text-3xl font-black uppercase italic tracking-tighter leading-none text-white">
+            Photo <span className="text-brand-green">Gallery</span>
+          </h1>
+          <p className="text-white/40 text-xs font-bold uppercase tracking-widest">
+            Manage athlete workout visuals, training equipment, and facility photography
+          </p>
+        </div>
+
+        <button
+          onClick={handleOpenAdd}
+          className="px-6 py-3 bg-brand-green hover:bg-white text-brand-charcoal font-black uppercase tracking-widest text-xs transition-all flex items-center gap-2 shadow-lg shadow-brand-green/10"
+        >
+          <Plus className="w-4 h-4" /> Add Photo
+        </button>
+      </div>
+
+      {/* Grid */}
+      {loading ? (
+        <div className="py-20 flex flex-col items-center justify-center gap-3">
+          <Loader2 className="w-8 h-8 text-brand-green animate-spin" />
+          <p className="text-white/40 text-xs font-bold uppercase tracking-widest">Loading gallery photos...</p>
+        </div>
+      ) : photos.length === 0 ? (
+        <div className="bg-brand-dark p-20 border border-white/5 text-center space-y-4">
+          <ImageIcon className="w-16 h-16 text-white/5 mx-auto" />
+          <h3 className="text-xl font-bold uppercase italic">No photos in gallery</h3>
+          <p className="text-white/40 text-xs uppercase tracking-widest">
+            Click &quot;Add Photo&quot; to upload your gym pictures.
+          </p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {photos.map((photo) => (
+            <div
+              key={photo.id}
+              className={`bg-brand-dark border transition-all flex flex-col justify-between overflow-hidden relative ${
+                photo.active ? 'border-white/10 hover:border-brand-green/50' : 'border-white/5 opacity-60'
+              }`}
+            >
+              {/* Image Container */}
+              <div className="relative h-48 w-full bg-brand-charcoal overflow-hidden">
+                <Image
+                  src={photo.image}
+                  alt={photo.alt || photo.title || 'Gym photo'}
+                  fill
+                  className="object-cover"
+                  referrerPolicy="no-referrer"
+                />
+                <div className="absolute top-3 right-3">
+                  <button
+                    onClick={() => handleToggleActive(photo)}
+                    className={`inline-flex items-center gap-1 px-2 py-0.5 text-[9px] font-black uppercase tracking-widest backdrop-blur-md ${
+                      photo.active
+                        ? 'bg-black/60 text-brand-green border border-brand-green/40'
+                        : 'bg-black/70 text-white/40 border border-white/10'
+                    }`}
+                  >
+                    {photo.active ? <Eye className="w-2.5 h-2.5" /> : <EyeOff className="w-2.5 h-2.5" />}
+                    {photo.active ? 'Visible' : 'Hidden'}
+                  </button>
+                </div>
+                {photo.category && (
+                  <div className="absolute bottom-3 left-3">
+                    <span className="px-2 py-0.5 bg-black/60 text-white/90 border border-white/20 text-[9px] font-black uppercase tracking-widest backdrop-blur-md">
+                      {photo.category}
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              {/* Caption & Actions */}
+              <div className="p-4 flex items-center justify-between border-t border-white/5">
+                <div className="pr-2 truncate">
+                  <h4 className="text-sm font-bold uppercase italic text-white truncate">
+                    {photo.title}
+                  </h4>
+                </div>
+
+                <div className="flex items-center gap-1 shrink-0">
+                  <button
+                    onClick={() => handleOpenEdit(photo)}
+                    className="p-1.5 bg-white/5 hover:bg-brand-green hover:text-brand-charcoal text-white/70 transition-all rounded"
+                    title="Edit photo details"
+                  >
+                    <Edit3 className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    onClick={() => handleDeleteClick(photo)}
+                    className="p-1.5 bg-white/5 hover:bg-red-600 hover:text-white text-white/70 transition-all rounded"
+                    title="Delete photo"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Modal */}
+      {isModalOpen && currentPhoto && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div
+            onClick={() => !isSaving && setIsModalOpen(false)}
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm"
+          />
+
+          <div className="relative w-full max-w-lg bg-brand-charcoal border border-white/10 p-6 md:p-8 shadow-2xl z-10 space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <span className="text-brand-green text-[10px] font-black uppercase tracking-widest block mb-1">
+                  {currentPhoto.id ? 'Modify Visual' : 'New Image'}
+                </span>
+                <h3 className="text-2xl font-syne font-bold uppercase italic text-white">
+                  {currentPhoto.id ? 'Edit Photo' : 'Add Gallery Photo'}
+                </h3>
+              </div>
+              <button
+                disabled={isSaving}
+                onClick={() => setIsModalOpen(false)}
+                className="text-white/40 hover:text-white"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSavePhoto} className="space-y-4">
+              <div>
+                <label className="text-[10px] font-black uppercase tracking-wider text-white/70 block mb-1">
+                  Photo Caption / Title *
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Free Weight Iron Zone"
+                  value={currentPhoto.title || ''}
+                  onChange={(e) => setCurrentPhoto({ ...currentPhoto, title: e.target.value })}
+                  className="w-full bg-brand-dark border border-white/10 px-3 py-2.5 text-white text-xs outline-none focus:border-brand-green"
+                />
+              </div>
+
+              <div>
+                <label className="text-[10px] font-black uppercase tracking-wider text-white/70 block mb-1">
+                  Category Tag
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. Training Floor, Cardio, Strength, Atmosphere"
+                  value={currentPhoto.category || ''}
+                  onChange={(e) => setCurrentPhoto({ ...currentPhoto, category: e.target.value })}
+                  className="w-full bg-brand-dark border border-white/10 px-3 py-2.5 text-white text-xs outline-none focus:border-brand-green"
+                />
+              </div>
+
+              <div>
+                <label className="text-[10px] font-black uppercase tracking-wider text-white/70 block mb-1">
+                  Image URL *
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="https://... or /background.jpg"
+                  value={currentPhoto.image || ''}
+                  onChange={(e) => setCurrentPhoto({ ...currentPhoto, image: e.target.value })}
+                  className="w-full bg-brand-dark border border-white/10 px-3 py-2.5 text-white text-xs outline-none focus:border-brand-green"
+                />
+                
+                {/* Presets */}
+                <div className="mt-2 flex items-center gap-2">
+                  <span className="text-[9px] text-white/40 font-mono">Quick Preset:</span>
+                  <button
+                    type="button"
+                    onClick={() => setCurrentPhoto({ ...currentPhoto, image: '/background.jpg' })}
+                    className="px-2 py-0.5 bg-white/5 hover:bg-white/10 text-white/70 text-[9px] font-mono border border-white/10"
+                  >
+                    Hero Gym Photo
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setCurrentPhoto({
+                        ...currentPhoto,
+                        image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=800&q=80',
+                      })
+                    }
+                    className="px-2 py-0.5 bg-white/5 hover:bg-white/10 text-white/70 text-[9px] font-mono border border-white/10"
+                  >
+                    Cardio Lab
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setCurrentPhoto({
+                        ...currentPhoto,
+                        image: 'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&w=800&q=80',
+                      })
+                    }
+                    className="px-2 py-0.5 bg-white/5 hover:bg-white/10 text-white/70 text-[9px] font-mono border border-white/10"
+                  >
+                    Heavy Racks
+                  </button>
+                </div>
+              </div>
+
+              {/* Preview */}
+              {currentPhoto.image && (
+                <div className="mt-3">
+                  <label className="text-[10px] font-black uppercase tracking-wider text-white/50 block mb-1">
+                    Live Preview
+                  </label>
+                  <div className="relative h-28 w-full bg-brand-dark border border-white/10 overflow-hidden">
+                    <Image
+                      src={currentPhoto.image}
+                      alt="Preview"
+                      fill
+                      className="object-cover"
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
+                </div>
+              )}
+
+              <div className="flex items-center gap-2 pt-2">
+                <input
+                  type="checkbox"
+                  id="photoActiveCheckbox"
+                  checked={currentPhoto.active ?? true}
+                  onChange={(e) => setCurrentPhoto({ ...currentPhoto, active: e.target.checked })}
+                  className="w-4 h-4 accent-brand-green cursor-pointer"
+                />
+                <label htmlFor="photoActiveCheckbox" className="text-xs text-white/80 cursor-pointer font-bold">
+                  Active (Show on Public Website)
+                </label>
+              </div>
+
+              <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/5">
+                <button
+                  type="button"
+                  disabled={isSaving}
+                  onClick={() => setIsModalOpen(false)}
+                  className="px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-white/60 hover:text-white bg-white/5"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSaving}
+                  className="px-6 py-2.5 bg-brand-green hover:bg-white text-brand-charcoal text-xs font-black uppercase tracking-widest transition-all flex items-center gap-2 disabled:opacity-50"
+                >
+                  {isSaving && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                  {currentPhoto.id ? 'Save Changes' : 'Add Photo'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Dialog */}
+      <CustomAlertDialog
+        isOpen={deleteDialogOpen}
+        onClose={() => setDeleteDialogOpen(false)}
+        onConfirm={handleConfirmDelete}
+        title="Delete Photo?"
+        description={`Are you sure you want to remove "${photoToDelete?.title}" from the gallery?`}
+        confirmText="Yes, Delete Photo"
+        cancelText="Cancel"
+        type="danger"
+        loading={isDeleting}
+      />
+    </div>
+  );
+}

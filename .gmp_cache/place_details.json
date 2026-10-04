@@ -1,0 +1,423 @@
+{
+  "id": "ChIJVQkE2O7pJDoRtI03cKZ7KeM",
+  "internationalPhoneNumber": "+91 83277 99535",
+  "formattedAddress": "Dandapani Complex, Balaji Mandir Road, Naktiguda, Bhawanipatna, Odisha 766001, India",
+  "location": {
+    "latitude": 19.906214,
+    "longitude": 83.1523893
+  },
+  "rating": 4.5,
+  "regularOpeningHours": {
+    "openNow": true,
+    "periods": [
+      {
+        "open": {
+          "day": 1,
+          "hour": 5,
+          "minute": 0
+        },
+        "close": {
+          "day": 1,
+          "hour": 9,
+          "minute": 0
+        }
+      },
+      {
+        "open": {
+          "day": 1,
+          "hour": 16,
+          "minute": 0
+        },
+        "close": {
+          "day": 1,
+          "hour": 21,
+          "minute": 30
+        }
+      },
+      {
+        "open": {
+          "day": 2,
+          "hour": 5,
+          "minute": 0
+        },
+        "close": {
+          "day": 2,
+          "hour": 9,
+          "minute": 0
+        }
+      },
+      {
+        "open": {
+          "day": 2,
+          "hour": 16,
+          "minute": 0
+        },
+        "close": {
+          "day": 2,
+          "hour": 21,
+          "minute": 30
+        }
+      },
+      {
+        "open": {
+          "day": 3,
+          "hour": 5,
+          "minute": 0
+        },
+        "close": {
+          "day": 3,
+          "hour": 9,
+          "minute": 0
+        }
+      },
+      {
+        "open": {
+          "day": 3,
+          "hour": 16,
+          "minute": 30
+        },
+        "close": {
+          "day": 3,
+          "hour": 21,
+          "minute": 30
+        }
+      },
+      {
+        "open": {
+          "day": 4,
+          "hour": 5,
+          "minute": 0
+        },
+        "close": {
+          "day": 4,
+          "hour": 9,
+          "minute": 0
+        }
+      },
+      {
+        "open": {
+          "day": 4,
+          "hour": 16,
+          "minute": 0
+        },
+        "close": {
+          "day": 4,
+          "hour": 21,
+          "minute": 30
+        }
+      },
+      {
+        "open": {
+          "day": 5,
+          "hour": 5,
+          "minute": 0
+        },
+        "close": {
+          "day": 5,
+          "hour": 9,
+          "minute": 0
+        }
+      },
+      {
+        "open": {
+          "day": 5,
+          "hour": 16,
+          "minute": 0
+        },
+        "close": {
+          "day": 5,
+          "hour": 21,
+          "minute": 30
+        }
+      },
+      {
+        "open": {
+          "day": 6,
+          "hour": 5,
+          "minute": 0
+        },
+        "close": {
+          "day": 6,
+          "hour": 9,
+          "minute": 0
+        }
+      },
+      {
+        "open": {
+          "day": 6,
+          "hour": 16,
+          "minute": 0
+        },
+        "close": {
+          "day": 6,
+          "hour": 21,
+          "minute": 30
+        }
+      }
+    ],
+    "weekdayDescriptions": [
+      "Monday: 5:00 – 9:00 AM, 4:00 – 9:30 PM",
+      "Tuesday: 5:00 – 9:00 AM, 4:00 – 9:30 PM",
+      "Wednesday: 5:00 – 9:00 AM, 4:30 – 9:30 PM",
+      "Thursday: 5:00 – 9:00 AM, 4:00 – 9:30 PM",
+      "Friday: 5:00 – 9:00 AM, 4:00 – 9:30 PM",
+      "Saturday: 5:00 – 9:00 AM, 4:00 – 9:30 PM",
+      "Sunday: Closed"
+    ],
+    "nextCloseTime": "2026-10-03T16:00:00Z"
+  },
+  "userRatingCount": 41,
+  "displayName": {
+    "text": "Oxygen Multifit Gym",
+    "languageCode": "en"
+  },
+  "reviews": [
+    {
+      "name": "places/ChIJVQkE2O7pJDoRtI03cKZ7KeM/reviews/ChdDSUhNMG9nS0VJQ0FnSURVakliRHJ3RRAB",
+      "relativePublishTimeDescription": "7 years ago",
+      "rating": 5,
+      "text": {
+        "text": "Good gym. Trainer and All equipment are available. Moderate admission and monthly fees. Best for students.",
+        "languageCode": "en"
+      },
+      "originalText": {
+        "text": "Good gym. Trainer and All equipment are available. Moderate admission and monthly fees. Best for students.",
+        "languageCode": "en"
+      },
+      "authorAttribution": {
+        "displayName": "Baidyanath Narayan Sinha",
+        "uri": "https://www.google.com/maps/contrib/105235290291925175559/reviews",
+        "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjW2bVfi-IK1D5x7zU8mqGdYUC5GIrWb1wIp9ELgTmAbQDN5xoho=s128-c0x00000000-cc-rp-mo-ba4"
+      },
+      "publishTime": "2019-08-16T02:39:45.409043Z",
+      "flagContentUri": "https://www.google.com/local/content/rap/report?postId=ChdDSUhNMG9nS0VJQ0FnSURVakliRHJ3RRAB&d=17924085&t=1",
+      "googleMapsUri": "https://www.google.com/maps/reviews/data=!4m6!14m5!1m4!2m3!1sChdDSUhNMG9nS0VJQ0FnSURVakliRHJ3RRAB!2m1!1s0x3a24e9eed8040955:0xe3297ba670378db4"
+    },
+    {
+      "name": "places/ChIJVQkE2O7pJDoRtI03cKZ7KeM/reviews/Ci9DQUlRQUNvZENodHljRjlvT25ac1FUZFZOa2wxT1RoeVNqWm1NVEpsY0MxNlQyYxAB",
+      "relativePublishTimeDescription": "a year ago",
+      "rating": 5,
+      "text": {
+        "text": "My favourite gym,in kalahandi,great trainer,\nNice staff....cool place",
+        "languageCode": "en"
+      },
+      "originalText": {
+        "text": "My favourite gym,in kalahandi,great trainer,\nNice staff....cool place",
+        "languageCode": "en"
+      },
+      "authorAttribution": {
+        "displayName": "Ranjit mahananad",
+        "uri": "https://www.google.com/maps/contrib/100223624359438586547/reviews",
+        "photoUri": "https://lh3.googleusercontent.com/a/ACg8ocIn6HxXQJwdzP3rnb0aAX1YVlKNLWsG1c7v0gcgZi4mlLlgQQ=s128-c0x00000000-cc-rp-mo"
+      },
+      "publishTime": "2025-09-27T07:47:47.617098916Z",
+      "flagContentUri": "https://www.google.com/local/content/rap/report?postId=Ci9DQUlRQUNvZENodHljRjlvT25ac1FUZFZOa2wxT1RoeVNqWm1NVEpsY0MxNlQyYxAB&d=17924085&t=1",
+      "googleMapsUri": "https://www.google.com/maps/reviews/data=!4m6!14m5!1m4!2m3!1sCi9DQUlRQUNvZENodHljRjlvT25ac1FUZFZOa2wxT1RoeVNqWm1NVEpsY0MxNlQyYxAB!2m1!1s0x3a24e9eed8040955:0xe3297ba670378db4"
+    },
+    {
+      "name": "places/ChIJVQkE2O7pJDoRtI03cKZ7KeM/reviews/ChZDSUhNMG9nS0VJQ0FnSUQ1d0ttck5nEAE",
+      "relativePublishTimeDescription": "2 years ago",
+      "rating": 5,
+      "text": {
+        "text": "This gym got everything...best trainer,  all the equipments and flexible timings for both men and women",
+        "languageCode": "en"
+      },
+      "originalText": {
+        "text": "This gym got everything...best trainer,  all the equipments and flexible timings for both men and women",
+        "languageCode": "en"
+      },
+      "authorAttribution": {
+        "displayName": "Preeti Kola",
+        "uri": "https://www.google.com/maps/contrib/105063874806653701438/reviews",
+        "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjWnZtHl3dCoVune5MBJqAjv9Cnaj8FyTEdR8s3GV5mfLb6HhFP9lQ=s128-c0x00000000-cc-rp-mo-ba3"
+      },
+      "publishTime": "2023-10-18T11:52:10.846513Z",
+      "flagContentUri": "https://www.google.com/local/content/rap/report?postId=ChZDSUhNMG9nS0VJQ0FnSUQ1d0ttck5nEAE&d=17924085&t=1",
+      "googleMapsUri": "https://www.google.com/maps/reviews/data=!4m6!14m5!1m4!2m3!1sChZDSUhNMG9nS0VJQ0FnSUQ1d0ttck5nEAE!2m1!1s0x3a24e9eed8040955:0xe3297ba670378db4"
+    },
+    {
+      "name": "places/ChIJVQkE2O7pJDoRtI03cKZ7KeM/reviews/Ci9DQUlRQUNvZENodHljRjlvT25wM01ESkhWRll5UXkxR1FubzBSWHAwUjFaTmEzYxAB",
+      "relativePublishTimeDescription": "11 months ago",
+      "rating": 5,
+      "text": {
+        "text": "Healthy & Quiet Atomosphere , So much Space available equipment",
+        "languageCode": "en"
+      },
+      "originalText": {
+        "text": "Healthy & Quiet Atomosphere , So much Space available equipment",
+        "languageCode": "en"
+      },
+      "authorAttribution": {
+        "displayName": "ahana sahoo",
+        "uri": "https://www.google.com/maps/contrib/117490642459661458864/reviews",
+        "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjUGsgCurpJdq4SopTVGKDkRa-KxxWJnsMwlj25z2q_O5SC08vzm=s128-c0x00000000-cc-rp-mo"
+      },
+      "publishTime": "2025-10-10T13:46:56.167721795Z",
+      "flagContentUri": "https://www.google.com/local/content/rap/report?postId=Ci9DQUlRQUNvZENodHljRjlvT25wM01ESkhWRll5UXkxR1FubzBSWHAwUjFaTmEzYxAB&d=17924085&t=1",
+      "googleMapsUri": "https://www.google.com/maps/reviews/data=!4m6!14m5!1m4!2m3!1sCi9DQUlRQUNvZENodHljRjlvT25wM01ESkhWRll5UXkxR1FubzBSWHAwUjFaTmEzYxAB!2m1!1s0x3a24e9eed8040955:0xe3297ba670378db4"
+    },
+    {
+      "name": "places/ChIJVQkE2O7pJDoRtI03cKZ7KeM/reviews/ChdDSUhNMG9nS0VJQ0FnSURSak5leTdBRRAB",
+      "relativePublishTimeDescription": "3 years ago",
+      "rating": 5,
+      "text": {
+        "text": "Best gym in Bhawanipatna, having almost all the fitness equipments and a good fitness trainer.",
+        "languageCode": "en"
+      },
+      "originalText": {
+        "text": "Best gym in Bhawanipatna, having almost all the fitness equipments and a good fitness trainer.",
+        "languageCode": "en"
+      },
+      "authorAttribution": {
+        "displayName": "L S Kalundia",
+        "uri": "https://www.google.com/maps/contrib/106904555165496811092/reviews",
+        "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjUGZju9L6jZeXSkXMCje-G4lVlOShLgrqdY5XYxl0vbDRwq7BA=s128-c0x00000000-cc-rp-mo"
+      },
+      "publishTime": "2023-04-19T11:37:28.682235Z",
+      "flagContentUri": "https://www.google.com/local/content/rap/report?postId=ChdDSUhNMG9nS0VJQ0FnSURSak5leTdBRRAB&d=17924085&t=1",
+      "googleMapsUri": "https://www.google.com/maps/reviews/data=!4m6!14m5!1m4!2m3!1sChdDSUhNMG9nS0VJQ0FnSURSak5leTdBRRAB!2m1!1s0x3a24e9eed8040955:0xe3297ba670378db4"
+    }
+  ],
+  "photos": [
+    {
+      "name": "places/ChIJVQkE2O7pJDoRtI03cKZ7KeM/photos/Aa-ngMbImham3jzp5HrgjkKvj4cjKRhl99WSx9RaG-35_Z1e_8GTYdnllsGs2pHRajMdgBp3_sAHOGWmCshRhxXQY28szDdVq-7_A-6UnZyVzbOPx-IRRueEGWceX-BVrxHc8naFkYNTGK1eZQIqQeEbbTFIAIu7gtv09CURpflck970nv9vodAqtwg1smSkMUOhXgmnhPfT2C8ROMBKoL43Ju2qDoGM-ynrSOjhUhzNkJYteO4nS75r5y0MRbpIIrBhaee3Vmaij9-gOYv1vjDlXVJACoysPis73lu5NKSxFZfkzfVELeJ5qcUCFeEfc8lBhA1_GM65sT6-LZOdxw0Vphh9mmVJPXe0OwKfhNJinPPseypOpt1NjKLMFrKavvEQrFDNe-pDtsNtWDdmKjF490VbE8UwmqeKejYoveAcmMxidety",
+      "widthPx": 1080,
+      "heightPx": 1920,
+      "authorAttributions": [
+        {
+          "displayName": "Buddhadev Takri (Dev)",
+          "uri": "https://maps.google.com/maps/contrib/107127558083264025696",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjWHYeBCNMvo9YpYQNRGFCxr7tUjtN_xOu3o8w6VnP-WkT7HEg5neA=s100-p-k-no-mo"
+        }
+      ],
+      "flagContentUri": "https://www.google.com/local/content/rap/report?postId=!1e10!2sCIHM0ogKEICAgICer8vAwgE&t=27&cb_client=maps_api_places.places_api&hl=en-US",
+      "googleMapsUri": "https://www.google.com/maps/place//data=!3m4!1e2!3m2!1sCIHM0ogKEICAgICer8vAwgE!2e10!4m2!3m1!1s0x3a24e9eed8040955:0xe3297ba670378db4"
+    },
+    {
+      "name": "places/ChIJVQkE2O7pJDoRtI03cKZ7KeM/photos/Aa-ngMZzNVZQB6nB8qjvEmELpM7cbGwKZqm_zxvVoqi-Jkoc17XZaxICu1bVLh_914Ox0Yz--pLrvieBVlck960vGBpMmC3dvhu2pUMc3v2gNjRw3EJzHFvwl5vqGMCen9JShkwwac1WIZw0DZkoyOdHSYnW4OfV2fvgDIszA4DVioyS1fNDJOnxxLZpTfEeTytdYqA3xmJH69UmAiXoOp6IbLLE7Wj6-AuC7EYC26oLxV1UiBkk6X0naIKLYTK9TqK88y9GYlwrRSUUr0mqNFWeFvNa1C1J5tyM5MAnRFmtAwDqrB0NNMn-BMHWFPqJMRjwnmicC627_hXAighTUfcbpRqsz7M7tzX5wfHdGUielW6gRuiaGhL5ZXsDyUmKvgc1U5np2mAO1bMRrexMj0SZUS4DPB8UjdgzqzKLHIdnUVg",
+      "widthPx": 3060,
+      "heightPx": 4080,
+      "authorAttributions": [
+        {
+          "displayName": "Birendra Khamari",
+          "uri": "https://maps.google.com/maps/contrib/114447275634895417628",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjUiZEohxbYK1u7ytpj7YMTzLS7BomMA1QNBnyS5R-CjY6yykGi_=s100-p-k-no-mo"
+        }
+      ],
+      "flagContentUri": "https://www.google.com/local/content/rap/report?postId=!1e10!2sCIHM0ogKEICAgIDhlIDjDw&t=27&cb_client=maps_api_places.places_api&hl=en-US",
+      "googleMapsUri": "https://www.google.com/maps/place//data=!3m4!1e2!3m2!1sCIHM0ogKEICAgIDhlIDjDw!2e10!4m2!3m1!1s0x3a24e9eed8040955:0xe3297ba670378db4"
+    },
+    {
+      "name": "places/ChIJVQkE2O7pJDoRtI03cKZ7KeM/photos/Aa-ngMYQRVXB7C1i27PsDcBTJWq-nZgQTbwH5Ph5zIV9X5nAUQQZLckXFQU3f0jHYIIOS-R8lml9bovPRiu9X86Ydq6He5cOjgKuEcO79l50zL9F2_AVCXGMhofBT7IZm4HKFWCHOMlNyWDImfwzpKQNSRB6GgKUp2qxnjqDTA0mCQeCLKVJMwq4wjhtkZF_G30Fsv30_tRO4x0-C6wpxfp0GNYCWzrsdUZyhQuoIzr8vKK-JySLuO_xNqSTWH7Q1O32_f-DB4_gtfg4Q26ZfviZBfmIr_DOFM8CZMIeyhx6n91UgHyGQc6aR3Yss5snUsBhy2LEvWxm9ErVJFBzT9k_UKmjPlZcFJ_E-lt6axLJiwlIB1d7gz5qP4zpJSjMcWyHTh0nifR09yv6xzmv2_df4qTE6-QIYk-eqEzeyV-W7jLAqzRj",
+      "widthPx": 2592,
+      "heightPx": 4608,
+      "authorAttributions": [
+        {
+          "displayName": "I_M_HaRrY",
+          "uri": "https://maps.google.com/maps/contrib/108966739476033055324",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjVXnfRfKiWjp0fpgCI7TN5RBKBIsJu0lyxC5o9YAsLeyruI2PYi=s100-p-k-no-mo"
+        }
+      ],
+      "flagContentUri": "https://www.google.com/local/content/rap/report?postId=!1e10!2sCIHM0ogKEICAgICR99LZyQE&t=27&cb_client=maps_api_places.places_api&hl=en-US",
+      "googleMapsUri": "https://www.google.com/maps/place//data=!3m4!1e2!3m2!1sCIHM0ogKEICAgICR99LZyQE!2e10!4m2!3m1!1s0x3a24e9eed8040955:0xe3297ba670378db4"
+    },
+    {
+      "name": "places/ChIJVQkE2O7pJDoRtI03cKZ7KeM/photos/Aa-ngMaTmsBJL9uvUbwS8G7oxnULtJDBF5i39Pnp8T48BLOHaOtUrajpJutWGZ7MqX7ytSLyIXIl0VhrsGeg4IuDtlOpWepQNftExKlJRKVATMRoqzGNIpjttEQyORU-BGxh67TzhG4_gRfb76fDLtCwzrgPi1o69a35dHoSnN8iKTx1MIt5g9KdkqqXFhuPRx1OcDoCqOPZiNjTU8JqGwGsmHEz7vqCjbk9DE4zDnPVoawXMB9s1c2_GswnnBuCluRwd56IxkShkPKjPuipdQpsfU8RFOz5hd3_JigVEK0YgglEJXW3cOL-jMbxKc6SYLPQkS48s9HpNOjT_uKU-AH9I2UB2t8_ECddGMGMT5Jx7NufRHGUITxeNxJi6zca9EEHEgwKO2lV2r0IlmdM7oY7QUYHZLvoiMRuNPI3IB_S-L86vxY",
+      "widthPx": 4608,
+      "heightPx": 2126,
+      "authorAttributions": [
+        {
+          "displayName": "Deepak Kumar",
+          "uri": "https://maps.google.com/maps/contrib/114045564884088050106",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjWybeehxjvynpuVWXh7hRhcwVhCHnxP4Asgkbq2VMlAUEmCaCud=s100-p-k-no-mo"
+        }
+      ],
+      "flagContentUri": "https://www.google.com/local/content/rap/report?postId=!1e10!2sCIHM0ogKEICAgICEwq-f3AE&t=27&cb_client=maps_api_places.places_api&hl=en-US",
+      "googleMapsUri": "https://www.google.com/maps/place//data=!3m4!1e2!3m2!1sCIHM0ogKEICAgICEwq-f3AE!2e10!4m2!3m1!1s0x3a24e9eed8040955:0xe3297ba670378db4"
+    },
+    {
+      "name": "places/ChIJVQkE2O7pJDoRtI03cKZ7KeM/photos/Aa-ngMak9wNd5JQQWrc5mdyLhyIWFKtj9pkc2eASqxJysUvthYejBQv4KFAJ2cAX9MI3lROd5BfoP65VS7GIW-QrPX-ox5euxwIivEUc68KLglwAguPlRXX0XBzvifcgqX5nJuhTuy2pULpb6GAP93C-5atNBMl1gS6nsipSaNZz8PHhjUlajGDE7ta1bPxsWXipUNphleTfl8tkjx1FGu0nqvWPFUCGIX20SiOe2zOjqy_hmLNhu0PO7CSOxqOny0A5q-wtaUzPLSPcF_l3eddlaNK2zs5xvF4-joz9wrEitw9lVFWbFrjAviaAaRI9udcUsi-eNL30yf5f4OtYV8OqhUGDNYRnjXvqjw3UJWfEtVePVdbJ75zPiKE-_RmAQzTIb3k0D2kSSX9hSkt1AAhxSeXdoVLPMKLP0-9h6L7qgf1l3ru8",
+      "widthPx": 3060,
+      "heightPx": 4080,
+      "authorAttributions": [
+        {
+          "displayName": "Birendra Khamari",
+          "uri": "https://maps.google.com/maps/contrib/114447275634895417628",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjUiZEohxbYK1u7ytpj7YMTzLS7BomMA1QNBnyS5R-CjY6yykGi_=s100-p-k-no-mo"
+        }
+      ],
+      "flagContentUri": "https://www.google.com/local/content/rap/report?postId=!1e10!2sCIHM0ogKEICAgIDBtu7mvgE&t=27&cb_client=maps_api_places.places_api&hl=en-US",
+      "googleMapsUri": "https://www.google.com/maps/place//data=!3m4!1e2!3m2!1sCIHM0ogKEICAgIDBtu7mvgE!2e10!4m2!3m1!1s0x3a24e9eed8040955:0xe3297ba670378db4"
+    },
+    {
+      "name": "places/ChIJVQkE2O7pJDoRtI03cKZ7KeM/photos/Aa-ngMY6ehHDDNMujlICm73SdSnvTp7Gsc6iTukLENspJ1QwgfVsb0AavDgWTov5P_teyN8T8d53V2CfPEWYXR7IutRU_TmbpJS2L49RvJe5-rehKqobLI1foNUfvOMlnZcZmxNKXqIXknWcXYUKO69ZeuVuLipi7j5xuEL6HCOqwxW1_aon9vOJu1acZvCse-LBxBc-00qWsH9cN9EBLqc3V7-ztBKrpRjavOmlloC2obU60E1pQMXd3nhiYBivPm-wUtCvWXD0ip4E1TjZraB_h922HSH9vzUJP4dGacE9WQExdiYAAB86ePKyVWHRJyaINTPM2_dXIvCic_hvtQ35IyBNzM-_fNT6f1-k4Dn_C2F5wMUZrL3CTHa4Jm-67Cx3zWOrGk5iEOaFXTzKmBHf0PG0rmgRUiTxMz8ZhlVMuYSnVoJO",
+      "widthPx": 2126,
+      "heightPx": 4608,
+      "authorAttributions": [
+        {
+          "displayName": "Deepak Kumar",
+          "uri": "https://maps.google.com/maps/contrib/114045564884088050106",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjWybeehxjvynpuVWXh7hRhcwVhCHnxP4Asgkbq2VMlAUEmCaCud=s100-p-k-no-mo"
+        }
+      ],
+      "flagContentUri": "https://www.google.com/local/content/rap/report?postId=!1e10!2sCIHM0ogKEICAgICEwq-fogE&t=27&cb_client=maps_api_places.places_api&hl=en-US",
+      "googleMapsUri": "https://www.google.com/maps/place//data=!3m4!1e2!3m2!1sCIHM0ogKEICAgICEwq-fogE!2e10!4m2!3m1!1s0x3a24e9eed8040955:0xe3297ba670378db4"
+    },
+    {
+      "name": "places/ChIJVQkE2O7pJDoRtI03cKZ7KeM/photos/Aa-ngMaGnvIG1XR-Qt87zgvv5qXRvl-4XAJbz2Q9fk2cyw36JUhyXUlS8N3RLwyMGt1qJC_p7HZYPh7g4YTsIWQNLHShoyb8yZ3sZioi49qhJTitZ6x3ELTlp_Znz9MpXAypMWRdmgAifQkXaZs3SEsProhsfRsx9wVPischtETIz4sg-mMp41m9m6IY3D9rmyPYU4oTFycVrdsNYi_MmBj1zA9HcGHurUzQZeYMNwbjTADCInACVO1FVdg2rgxzmIjlxas4xjGroIEGDvlm-Wt7LJBETeQdOFN6hHRGlUoONlptWV5DkWD5t_IRgWHEqz6PgJkkA6QiPmJQ-U07yOozq-8d2IMoHmb8aeqhQagphin4HqyA9lwzrpEMjgixZMGm0mGmdbw-k3xdLUpMOMuJ4BXt4QqtTKWTthf0nibRIjBvows2zwJ7_K4Mwj3MDsCh",
+      "widthPx": 960,
+      "heightPx": 960,
+      "authorAttributions": [
+        {
+          "displayName": "Oxygen Gym",
+          "uri": "https://maps.google.com/maps/contrib/111094756656678132965",
+          "photoUri": "https://lh3.googleusercontent.com/a/ACg8ocIZVn2-MwymLi__9D9DCivFWzn6U_vI1bNk0e3WPGe9NtTBMA=s100-p-k-no-mo"
+        }
+      ],
+      "flagContentUri": "https://www.google.com/local/content/rap/report?postId=!1e10!2sCIABIhCjKCeMYN8Biiet5cvWV4os&t=27&cb_client=maps_api_places.places_api&hl=en-US",
+      "googleMapsUri": "https://www.google.com/maps/place//data=!3m4!1e2!3m2!1sCIABIhCjKCeMYN8Biiet5cvWV4os!2e10!4m2!3m1!1s0x3a24e9eed8040955:0xe3297ba670378db4"
+    },
+    {
+      "name": "places/ChIJVQkE2O7pJDoRtI03cKZ7KeM/photos/Aa-ngMYijyQ-ytCZIm0mnXjni6adqmTZEmLbMdMoVQelYh9Zi_H50kvls6FBpNU788kPWhjoK3ILWMLzGtxr1XWc-EvN8P9el4Z4U68vAEbNP6UKEKS9CmPKHnG6eaobwJVZkShodLYxO9AhtHvGvbv9IR3Jfodf6Le43mFAMZX9FYxvq3Ic3NLL-3cJ-fSDTpvZ3AIkiLIIMgd2agI8dQg-CpE-0pqSKmud0TbnyYiQC-tNALBFelwbIiJVWmW63NO6vOzMUbuY2-CwLvdUtQax4GFQkSx8jI-eoCPT0k3682RqeCSEY0GDAQfikvMCQZg4DAhrIS3oRw6hQJXLguoeKMf4KYFnW08q4eiv8hrIuGjmSL8iOewYz8hLvOlgNxRHAyN28-8RZ1wYKwFo-huqaNE54fglB46j6lC1GDtOH0tZ-iP3",
+      "widthPx": 2126,
+      "heightPx": 4608,
+      "authorAttributions": [
+        {
+          "displayName": "Deepak Kumar",
+          "uri": "https://maps.google.com/maps/contrib/114045564884088050106",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjWybeehxjvynpuVWXh7hRhcwVhCHnxP4Asgkbq2VMlAUEmCaCud=s100-p-k-no-mo"
+        }
+      ],
+      "flagContentUri": "https://www.google.com/local/content/rap/report?postId=!1e10!2sCIHM0ogKEICAgICMwuLxngE&t=27&cb_client=maps_api_places.places_api&hl=en-US",
+      "googleMapsUri": "https://www.google.com/maps/place//data=!3m4!1e2!3m2!1sCIHM0ogKEICAgICMwuLxngE!2e10!4m2!3m1!1s0x3a24e9eed8040955:0xe3297ba670378db4"
+    },
+    {
+      "name": "places/ChIJVQkE2O7pJDoRtI03cKZ7KeM/photos/Aa-ngMYZ2Mk5Z6gucETUjEUSFSuOWDPhHUFqb_TQRUg6zLKloH_Sdaf-zxb226LadSwgHZnqstjnuqNIbWHitDFlgJdGk0-_uNUQ59EuEoNjJQgun5r_4FwotSYag_rwUSRvMB7Y9DJWbLaNNnrmVghlnnDQbULBUdHP8tZOAMQeQBxouOWln-RG0ZTnffqGMMwhy8HT3FZUUA8tNXcyLCjG1SD_12Mn-_wwxVSAmFYiQtHgsiLfNQD1nKoyOY_XE3LILARIaLVQ2X83vC5ZMR0XHBpEXsrhhhHzwShv4wyZbFYCpWtEMqzZB4CS9Q_QPPYVI4SlsoIH9W_QrUhqEGttirhIJIZm6M8plSF6NbTSQVJCS2KUOs-l-wFQRohdHIg6yHih_lOBn99ArizK4jkI1Xl9o47sFo-1VDVFRs0_0lnhcWP9",
+      "widthPx": 2126,
+      "heightPx": 4608,
+      "authorAttributions": [
+        {
+          "displayName": "Deepak Kumar",
+          "uri": "https://maps.google.com/maps/contrib/114045564884088050106",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjWybeehxjvynpuVWXh7hRhcwVhCHnxP4Asgkbq2VMlAUEmCaCud=s100-p-k-no-mo"
+        }
+      ],
+      "flagContentUri": "https://www.google.com/local/content/rap/report?postId=!1e10!2sCIHM0ogKEICAgICEwq-f_AE&t=27&cb_client=maps_api_places.places_api&hl=en-US",
+      "googleMapsUri": "https://www.google.com/maps/place//data=!3m4!1e2!3m2!1sCIHM0ogKEICAgICEwq-f_AE!2e10!4m2!3m1!1s0x3a24e9eed8040955:0xe3297ba670378db4"
+    },
+    {
+      "name": "places/ChIJVQkE2O7pJDoRtI03cKZ7KeM/photos/Aa-ngMYzSNB7yyajvdU5DBi6g6ezTvn9S9PBfGeMM1N_R_JhWCuLEsMbdmkJm8zgXe1cJHvH03nn7lCcu_WvEA6rQ01Gxna2eBijhd0k-nyfP8uwgnselu5JInrYueSfEDEOm2MpQZbOIYW4a6_Aissm61YgsIfPIMkZ8hjFoUOM8ySkMQk4v7RpgIpXDIh3BO3Z13r0uLITWZ2nJM8FVkR3nDETjLjWzIDrG9-01YudoMMxRIJ7fqt7svGREiEozzLtxnp4wX1MbgwIaA9-UCVmn57sn4gQOiLDunrU0ythG-YZZqVEjJCyU27HYrHRGRMa5zqM54VUswISJWVzJCLG9VwsnV9_Zv7xZSAmWuGzVel4PjtGDX_ORTPBi2HlFXjs3AIC5cAaGQyycfXOmmC-_mtg6DKf1ovoDX5-JuvIaCM",
+      "widthPx": 2126,
+      "heightPx": 4608,
+      "authorAttributions": [
+        {
+          "displayName": "Deepak Kumar",
+          "uri": "https://maps.google.com/maps/contrib/114045564884088050106",
+          "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjWybeehxjvynpuVWXh7hRhcwVhCHnxP4Asgkbq2VMlAUEmCaCud=s100-p-k-no-mo"
+        }
+      ],
+      "flagContentUri": "https://www.google.com/local/content/rap/report?postId=!1e10!2sCIHM0ogKEICAgICEwq-fIg&t=27&cb_client=maps_api_places.places_api&hl=en-US",
+      "googleMapsUri": "https://www.google.com/maps/place//data=!3m4!1e2!3m2!1sCIHM0ogKEICAgICEwq-fIg!2e10!4m2!3m1!1s0x3a24e9eed8040955:0xe3297ba670378db4"
+    }
+  ]
+}
