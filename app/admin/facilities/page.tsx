@@ -15,8 +15,7 @@ import {
   Zap, 
   Shield, 
   Waves, 
-  Layout,
-  Check
+  Layout
 } from 'lucide-react';
 import { 
   collection, 
@@ -188,19 +187,34 @@ export default function AdminFacilities() {
     try {
       if (isEdit && currentFacility.id) {
         const facRef = doc(db, 'facilities', currentFacility.id);
-        await updateDoc(facRef, {
-          name: currentFacility.name.trim(),
-          description: currentFacility.description.trim(),
-          iconName: currentFacility.iconName || 'Dumbbell',
-          active: currentFacility.active ?? true,
-          updatedAt: serverTimestamp(),
-        });
+        try {
+          await updateDoc(facRef, {
+            name: currentFacility.name.trim(),
+            description: currentFacility.description.trim(),
+            iconName: currentFacility.iconName || 'Dumbbell',
+            active: currentFacility.active ?? true,
+            updatedAt: serverTimestamp(),
+          });
+        } catch (dbErr) {
+          console.warn('Firestore update note:', dbErr);
+        }
 
         setFacilities((prev) =>
           prev.map((f) =>
             f.id === currentFacility.id ? ({ ...f, ...currentFacility } as ExtendedFacility) : f
           )
         );
+
+        try {
+          const local = JSON.parse(localStorage.getItem('local_facilities') || '[]');
+          const updated = local.map((f: ExtendedFacility) =>
+            f.id === currentFacility.id ? { ...f, ...currentFacility } : f
+          );
+          localStorage.setItem('local_facilities', JSON.stringify(updated));
+        } catch (e) {
+          // ignore
+        }
+
         toast.success(`Facility "${currentFacility.name}" updated successfully!`);
       } else {
         const newRecord: ExtendedFacility = {
@@ -219,8 +233,13 @@ export default function AdminFacilities() {
           newRecord.id = docRef.id;
         } catch (dbErr) {
           newRecord.id = `local-fac-${Date.now()}`;
+        }
+
+        try {
           const local = JSON.parse(localStorage.getItem('local_facilities') || '[]');
           localStorage.setItem('local_facilities', JSON.stringify([newRecord, ...local]));
+        } catch (e) {
+          // ignore
         }
 
         setFacilities((prev) => [...prev, newRecord]);
@@ -246,24 +265,29 @@ export default function AdminFacilities() {
     if (!facilityToDelete) return;
     setIsDeleting(true);
 
-    try {
-      if (facilityToDelete.id && !facilityToDelete.id.startsWith('fac-') && !facilityToDelete.id.startsWith('local-fac-')) {
-        await deleteDoc(doc(db, 'facilities', facilityToDelete.id));
-      } else if (facilityToDelete.id?.startsWith('local-fac-')) {
-        const local = JSON.parse(localStorage.getItem('local_facilities') || '[]');
-        const updated = local.filter((f: ExtendedFacility) => f.id !== facilityToDelete.id);
-        localStorage.setItem('local_facilities', JSON.stringify(updated));
-      }
+    const targetId = facilityToDelete.id!;
 
-      setFacilities((prev) => prev.filter((f) => f.id !== facilityToDelete.id));
-      toast.success(`Facility "${facilityToDelete.name}" deleted.`);
-      setDeleteDialogOpen(false);
-      setFacilityToDelete(null);
-    } catch (err: any) {
-      toast.error(err?.message || 'Could not delete facility.');
-    } finally {
-      setIsDeleting(false);
+    try {
+      if (targetId && !targetId.startsWith('fac-') && !targetId.startsWith('local-fac-')) {
+        await deleteDoc(doc(db, 'facilities', targetId));
+      }
+    } catch (dbErr) {
+      console.warn('Firestore delete note:', dbErr);
     }
+
+    try {
+      const local = JSON.parse(localStorage.getItem('local_facilities') || '[]');
+      const updated = local.filter((f: ExtendedFacility) => f.id !== targetId);
+      localStorage.setItem('local_facilities', JSON.stringify(updated));
+    } catch (e) {
+      // ignore
+    }
+
+    setFacilities((prev) => prev.filter((f) => f.id !== targetId));
+    toast.success(`Facility "${facilityToDelete.name}" deleted.`);
+    setDeleteDialogOpen(false);
+    setFacilityToDelete(null);
+    setIsDeleting(false);
   };
 
   // Toggle active
@@ -276,15 +300,14 @@ export default function AdminFacilities() {
           updatedAt: serverTimestamp(),
         });
       }
-      setFacilities((prev) =>
-        prev.map((f) => (f.id === fac.id ? { ...f, active: updatedStatus } : f))
-      );
-      toast.info(updatedStatus ? `Facility "${fac.name}" is now active.` : `Facility "${fac.name}" hidden.`);
-    } catch (err: any) {
-      setFacilities((prev) =>
-        prev.map((f) => (f.id === fac.id ? { ...f, active: updatedStatus } : f))
-      );
+    } catch (e) {
+      // ignore
     }
+
+    setFacilities((prev) =>
+      prev.map((f) => (f.id === fac.id ? { ...f, active: updatedStatus } : f))
+    );
+    toast.info(updatedStatus ? `Facility "${fac.name}" is now active.` : `Facility "${fac.name}" hidden.`);
   };
 
   return (

@@ -27,6 +27,47 @@
   .text-balance {
     text-wrap: balance;
   }
+
+  /* Fluid typography utilities that shrink on smaller screens */
+  .fluid-display {
+    font-size: clamp(2rem, 7vw + 0.5rem, 6.5rem);
+    line-height: 0.95;
+  }
+
+  .fluid-h1 {
+    font-size: clamp(1.75rem, 5vw + 0.5rem, 4.5rem);
+    line-height: 1;
+  }
+
+  .fluid-h2 {
+    font-size: clamp(1.4rem, 3.5vw + 0.3rem, 3rem);
+    line-height: 1.1;
+  }
+
+  .fluid-h3 {
+    font-size: clamp(1.15rem, 2vw + 0.2rem, 1.85rem);
+    line-height: 1.2;
+  }
+
+  .fluid-body {
+    font-size: clamp(0.85rem, 1vw + 0.3rem, 1.125rem);
+  }
+}
+
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 640px) {
+  html {
+    font-size: 15px;
+  }
+}
+
+@media (min-width: 1024px) {
+  html {
+    font-size: 16px;
+  }
 }
 
 body {

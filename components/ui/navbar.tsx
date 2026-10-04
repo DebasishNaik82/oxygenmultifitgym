@@ -46,7 +46,7 @@ export default function Navbar() {
       <div className="container mx-auto px-6 flex items-center justify-between font-syne text-white">
         {/* Zone 1: Brand */}
         <Link href="/" className="flex items-center gap-2 group">
-          <span className="text-xl font-bold tracking-tighter uppercase italic">
+          <span className="text-base sm:text-lg md:text-xl font-bold tracking-tighter uppercase italic">
             OXYGEN<span className="text-brand-green">MULTIFIT</span>
           </span>
         </Link>

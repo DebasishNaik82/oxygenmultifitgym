@@ -23,6 +23,7 @@ export default function SubmitReviewModal({
   const [rating, setRating] = useState(5);
   const [hoverRating, setHoverRating] = useState(0);
   const [reviewText, setReviewText] = useState('');
+  const [memberId, setMemberId] = useState('');
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const toast = useToast();
@@ -38,12 +39,17 @@ export default function SubmitReviewModal({
 
     setLoading(true);
 
+    const hasMemberId = Boolean(memberId.trim());
+
     const newReview: Review = {
       customerName: customerName.trim(),
       review: reviewText.trim(),
       rating,
       date: 'Just now',
       published: true,
+      verificationStatus: hasMemberId ? 'pending_verification' : 'unverified',
+      memberId: memberId.trim() || undefined,
+      verifiedBadge: false,
     };
 
     try {
@@ -51,9 +57,14 @@ export default function SubmitReviewModal({
       const docRef = await addDoc(collection(db, 'reviews'), {
         ...newReview,
         createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
       });
       newReview.id = docRef.id;
-      toast.success('Thank you! Your review has been submitted.');
+      if (hasMemberId) {
+        toast.success('Review submitted with Member ID! Sent for Admin Verification.');
+      } else {
+        toast.success('Thank you! Your review has been submitted.');
+      }
     } catch (err: any) {
       console.warn('Firestore write notice (saving locally):', err?.message);
       // Fallback: Store locally in localStorage reviews cache
@@ -64,7 +75,7 @@ export default function SubmitReviewModal({
       } catch (e) {
         // ignore
       }
-      toast.success('Review posted successfully!');
+      toast.success(hasMemberId ? 'Review submitted! Sent for admin verification.' : 'Review posted successfully!');
     } finally {
       setLoading(false);
       setSubmitted(true);
@@ -75,6 +86,7 @@ export default function SubmitReviewModal({
         setSubmitted(false);
         setCustomerName('');
         setReviewText('');
+        setMemberId('');
         setRating(5);
         onClose();
       }, 1500);
@@ -199,6 +211,26 @@ export default function SubmitReviewModal({
                     onChange={(e) => setReviewText(e.target.value)}
                     className="w-full bg-brand-dark border border-white/10 p-4 text-white text-xs placeholder:text-white/30 focus:border-brand-green outline-none transition-colors resize-none leading-relaxed"
                   />
+                </div>
+
+                {/* Optional Gym Member ID */}
+                <div className="space-y-1 bg-white/[0.02] p-3 border border-white/5">
+                  <div className="flex items-center justify-between">
+                    <label className="text-[10px] font-black uppercase tracking-wider text-brand-green block">
+                      Gym Member ID (Optional)
+                    </label>
+                    <span className="text-[9px] text-white/40">For Member Verification</span>
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="e.g. O2-1049 or Registered Phone Number"
+                    value={memberId}
+                    onChange={(e) => setMemberId(e.target.value)}
+                    className="w-full bg-brand-dark border border-white/10 px-3 py-2 text-white text-xs placeholder:text-white/30 focus:border-brand-green outline-none transition-colors font-mono"
+                  />
+                  <p className="text-[9px] text-white/40">
+                    If provided, your review is marked &ldquo;Sent for Admin Verification&rdquo; to receive the official Verified Gym Member badge.
+                  </p>
                 </div>
 
                 {/* Action Buttons */}

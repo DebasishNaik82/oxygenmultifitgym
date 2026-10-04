@@ -1,4 +1,12 @@
 {
   "projectId": "clientprojects88",
-  "databaseId": "oxygenmultifitgym-db"
+  "appId": "1:297631820262:web:c82e94941adec76313ce27",
+  "apiKey": "AIzaSyAnY8Kca-024NQ8khTx9Nd9OfzcG3PMy10",
+  "authDomain": "clientprojects88.firebaseapp.com",
+  "firestoreDatabaseId": "oxygenmultifitgym-db",
+  "storageBucket": "clientprojects88.firebasestorage.app",
+  "messagingSenderId": "297631820262",
+  "measurementId": "",
+  "oAuthClientId": "297631820262-sun51f9ji3tca5jqvtk6uoitl6pun864.apps.googleusercontent.com",
+  "recaptchaSiteKey": ""
 }

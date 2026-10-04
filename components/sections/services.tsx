@@ -32,28 +32,28 @@ const services = [
 
 export default function Services() {
   return (
-    <section id="services" className="py-32 bg-brand-charcoal overflow-hidden border-t border-white/5">
-      <div className="container mx-auto px-6">
-        <div className="flex flex-col lg:flex-row justify-between items-start mb-24 gap-12">
+    <section id="services" className="py-16 sm:py-24 md:py-32 bg-brand-charcoal overflow-hidden border-t border-white/5">
+      <div className="container mx-auto px-4 sm:px-6">
+        <div className="flex flex-col lg:flex-row justify-between items-start mb-12 sm:mb-16 md:mb-24 gap-8 sm:gap-12">
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             className="max-w-2xl"
           >
-            <span className="text-brand-green text-[10px] font-semibold uppercase tracking-[0.5em] mb-6 block">
+            <span className="text-brand-green text-[10px] font-semibold uppercase tracking-[0.4em] sm:tracking-[0.5em] mb-4 sm:mb-6 block">
               What We Offer
             </span>
-            <h2 className="text-5xl md:text-8xl font-syne font-bold italic uppercase tracking-tighter leading-none mb-8">
+            <h2 className="text-2xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-syne font-bold italic uppercase tracking-tighter leading-tight sm:leading-none mb-6 sm:mb-8">
               Training <span className="text-brand-green">Programs</span>
             </h2>
-            <p className="text-white/40 text-lg md:text-xl font-jakarta leading-relaxed max-w-xl">
+            <p className="text-white/40 text-sm sm:text-base md:text-lg font-jakarta leading-relaxed max-w-xl">
               We teach you the right way to train so you can reach your goals quickly.
             </p>
           </motion.div>
           
           <div className="hidden lg:block pt-12">
-            <div className="font-syne font-bold text-9xl text-stroke opacity-10 italic">
+            <div className="font-syne font-bold text-7xl xl:text-9xl text-stroke opacity-10 italic">
               WORK
             </div>
           </div>
@@ -67,26 +67,26 @@ export default function Services() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className="group p-12 md:p-20 border-b border-white/10 md:even:border-l relative overflow-hidden transition-colors hover:bg-brand-muted"
+              className="group p-6 sm:p-8 md:p-14 lg:p-18 border-b border-white/10 md:even:border-l relative overflow-hidden transition-colors hover:bg-brand-muted"
             >
               <div className="relative z-10 flex flex-col h-full">
-                <div className="flex justify-between items-start mb-12">
-                  <span className="font-syne font-bold text-4xl text-white/10 group-hover:text-brand-green transition-colors duration-500">
+                <div className="flex justify-between items-start mb-6 sm:mb-10">
+                  <span className="font-syne font-bold text-2xl sm:text-3xl md:text-4xl text-white/10 group-hover:text-brand-green transition-colors duration-500">
                     {service.id}
                   </span>
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-brand-green/40 border border-brand-green/20 px-3 py-1">
+                  <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-brand-green/60 border border-brand-green/20 px-2.5 py-1">
                     {service.tag}
                   </span>
                 </div>
                 
-                <h3 className="text-3xl md:text-4xl font-syne font-bold italic uppercase mb-6 group-hover:translate-x-2 transition-transform duration-500">
+                <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-syne font-bold italic uppercase mb-4 sm:mb-6 group-hover:translate-x-2 transition-transform duration-500">
                   {service.name}
                 </h3>
-                <p className="text-white/40 group-hover:text-white/70 transition-colors duration-500 font-jakarta leading-relaxed max-w-sm mb-12">
+                <p className="text-white/50 group-hover:text-white/80 transition-colors duration-500 text-xs sm:text-sm font-jakarta leading-relaxed max-w-sm mb-6 sm:mb-10">
                   {service.description}
                 </p>
                 
-                <div className="mt-auto pt-6 border-t border-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center gap-2 text-brand-green font-syne font-semibold uppercase tracking-widest text-[10px]">
+                <div className="mt-auto pt-4 sm:pt-6 border-t border-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center gap-2 text-brand-green font-syne font-semibold uppercase tracking-widest text-[9px] sm:text-[10px]">
                   Explore Protocol <ArrowUpRight className="w-3 h-3" />
                 </div>
               </div>

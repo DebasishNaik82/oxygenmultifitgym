@@ -53,6 +53,8 @@ export interface GalleryItem {
   displayOrder: number;
 }
 
+export type VerificationStatus = 'unverified' | 'pending_verification' | 'verified';
+
 export interface Review {
   id?: string;
   customerName: string;
@@ -60,6 +62,9 @@ export interface Review {
   rating: number;
   date: string;
   published: boolean;
+  verificationStatus?: VerificationStatus;
+  memberId?: string;
+  verifiedBadge?: boolean;
   createdAt?: Timestamp | any;
   updatedAt?: Timestamp | any;
 }

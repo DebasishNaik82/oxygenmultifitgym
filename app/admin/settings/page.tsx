@@ -6,15 +6,11 @@ import {
   Save, 
   Lock, 
   MapPin, 
-  Phone, 
-  Mail, 
   Clock, 
   ShieldCheck, 
-  Loader2, 
-  CheckCircle2, 
-  AlertCircle 
+  Loader2 
 } from 'lucide-react';
-import { doc, getDoc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useToast } from '@/components/ui/toast-provider';
 
@@ -58,7 +54,6 @@ export default function AdminSettings() {
   useEffect(() => {
     async function loadData() {
       try {
-        // Load Settings
         const settingsSnap = await getDoc(doc(db, 'settings', 'general'));
         if (settingsSnap.exists()) {
           setSettings({ ...defaultSettings, ...settingsSnap.data() } as GymSettings);
@@ -69,7 +64,6 @@ export default function AdminSettings() {
           }
         }
 
-        // Load Admin Username
         const adminSnap = await getDoc(doc(db, 'admin', 'credentials'));
         if (adminSnap.exists()) {
           const data = adminSnap.data();
@@ -214,15 +208,13 @@ export default function AdminSettings() {
                 <label className="text-[10px] font-black uppercase tracking-wider text-white/70 block mb-1">
                   Contact Phone Number
                 </label>
-                <div className="relative">
-                  <input
-                    type="text"
-                    required
-                    value={settings.phone}
-                    onChange={(e) => setSettings({ ...settings, phone: e.target.value })}
-                    className="w-full bg-brand-charcoal border border-white/10 px-3 py-2.5 text-white text-xs outline-none focus:border-brand-green"
-                  />
-                </div>
+                <input
+                  type="text"
+                  required
+                  value={settings.phone}
+                  onChange={(e) => setSettings({ ...settings, phone: e.target.value })}
+                  className="w-full bg-brand-charcoal border border-white/10 px-3 py-2.5 text-white text-xs outline-none focus:border-brand-green"
+                />
               </div>
             </div>
 

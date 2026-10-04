@@ -65,29 +65,29 @@ const plans = [
 
 export default function Membership() {
   return (
-    <section id="membership" className="py-24 bg-brand-dark overflow-hidden border-t border-white/5">
-      <div className="container mx-auto px-6">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
+    <section id="membership" className="py-14 sm:py-20 md:py-24 bg-brand-dark overflow-hidden border-t border-white/5">
+      <div className="container mx-auto px-4 sm:px-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 sm:mb-16 gap-6 sm:gap-8">
           <div className="max-w-2xl">
-            <span className="text-brand-green text-[10px] font-semibold uppercase tracking-[0.5em] mb-4 block">
+            <span className="text-brand-green text-[10px] font-semibold uppercase tracking-[0.4em] sm:tracking-[0.5em] mb-3 sm:mb-4 block">
               Pricing & Memberships
             </span>
-            <h2 className="text-4xl md:text-6xl font-syne font-bold italic uppercase tracking-tighter leading-none mb-4">
+            <h2 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-syne font-bold italic uppercase tracking-tighter leading-tight sm:leading-none mb-3 sm:mb-4">
               Invest In Your <span className="text-brand-green">Strength</span>
             </h2>
-            <p className="text-white/60 text-sm font-jakarta max-w-xl">
+            <p className="text-white/60 text-xs sm:text-sm font-jakarta max-w-xl">
               Transparent, premium fitness plans with no hidden charges. All memberships include full facility access and certified trainer supervision.
             </p>
           </div>
-          <div className="border-l border-brand-green pl-6 py-2">
-            <p className="text-brand-green font-bold text-lg font-syne uppercase tracking-wider">Demo Rates</p>
-            <p className="text-white/40 text-xs uppercase tracking-widest font-semibold font-jakarta">
+          <div className="border-l border-brand-green pl-4 sm:pl-6 py-1 sm:py-2">
+            <p className="text-brand-green font-bold text-base sm:text-lg font-syne uppercase tracking-wider">Demo Rates</p>
+            <p className="text-white/40 text-[10px] sm:text-xs uppercase tracking-widest font-semibold font-jakarta">
               Limited Period Offer
             </p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
           {plans.map((plan, index) => (
             <motion.div 
               key={plan.name}
@@ -95,44 +95,44 @@ export default function Membership() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className={`p-8 md:p-10 flex flex-col h-full bg-brand-charcoal transition-all duration-300 relative border ${
+              className={`p-5 sm:p-7 md:p-10 flex flex-col h-full bg-brand-charcoal transition-all duration-300 relative border ${
                 plan.highlight 
                   ? 'border-brand-green shadow-xl shadow-brand-green/10' 
                   : 'border-white/10 hover:border-white/20'
               }`}
             >
               {/* Header Badge */}
-              <div className="flex items-center justify-between gap-2 mb-6">
-                <span className={`text-[10px] font-black uppercase tracking-widest px-3 py-1 ${
+              <div className="flex items-center justify-between gap-2 mb-4 sm:mb-6">
+                <span className={`text-[9px] sm:text-[10px] font-black uppercase tracking-widest px-2.5 sm:px-3 py-1 ${
                   plan.highlight 
                     ? 'bg-brand-green text-brand-charcoal font-black' 
                     : 'bg-white/10 text-white/70'
                 }`}>
                   {plan.badge}
                 </span>
-                <span className="text-[11px] font-semibold uppercase tracking-wider text-white/40 font-jakarta">
+                <span className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-white/40 font-jakarta">
                   {plan.duration}
                 </span>
               </div>
               
               {/* Title & Price */}
-              <div className="mb-6">
-                <h3 className="text-3xl font-syne font-bold italic uppercase mb-3 flex items-center gap-2">
+              <div className="mb-4 sm:mb-6">
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-syne font-bold italic uppercase mb-2 sm:mb-3 flex items-center gap-2">
                   {plan.name}
-                  {plan.highlight && <Sparkles className="w-5 h-5 text-brand-green fill-brand-green" />}
+                  {plan.highlight && <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-brand-green fill-brand-green" />}
                 </h3>
-                <p className="text-white/50 text-xs font-jakarta leading-relaxed mb-6">
+                <p className="text-white/50 text-xs font-jakarta leading-relaxed mb-4 sm:mb-6">
                   {plan.description}
                 </p>
                 
-                <div className="flex items-baseline gap-3">
-                  <span className="text-4xl md:text-5xl font-black font-syne tracking-tight text-white">
+                <div className="flex items-baseline gap-2 sm:gap-3 flex-wrap">
+                  <span className="text-3xl sm:text-4xl md:text-5xl font-black font-syne tracking-tight text-white">
                     {plan.price}
                   </span>
-                  <span className="text-white/40 line-through text-sm font-semibold">
+                  <span className="text-white/40 line-through text-xs sm:text-sm font-semibold">
                     {plan.originalPrice}
                   </span>
-                  <span className="text-white/50 text-xs font-semibold">
+                  <span className="text-white/50 text-[11px] sm:text-xs font-semibold">
                     {plan.period}
                   </span>
                 </div>

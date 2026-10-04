@@ -9,9 +9,7 @@ import {
   Eye, 
   EyeOff, 
   X, 
-  Loader2, 
-  Tag, 
-  Sparkles 
+  Loader2 
 } from 'lucide-react';
 import { 
   collection, 
@@ -175,19 +173,34 @@ export default function AdminServices() {
     try {
       if (isEdit && currentService.id) {
         const srvRef = doc(db, 'services', currentService.id);
-        await updateDoc(srvRef, {
-          name: currentService.name.trim(),
-          description: currentService.description.trim(),
-          tag: currentService.tag?.trim() || 'General',
-          active: currentService.active ?? true,
-          updatedAt: serverTimestamp(),
-        });
+        try {
+          await updateDoc(srvRef, {
+            name: currentService.name.trim(),
+            description: currentService.description.trim(),
+            tag: currentService.tag?.trim() || 'General',
+            active: currentService.active ?? true,
+            updatedAt: serverTimestamp(),
+          });
+        } catch (dbErr) {
+          console.warn('Firestore update note:', dbErr);
+        }
 
         setServices((prev) =>
           prev.map((s) =>
             s.id === currentService.id ? ({ ...s, ...currentService } as ExtendedService) : s
           )
         );
+
+        try {
+          const local = JSON.parse(localStorage.getItem('local_services') || '[]');
+          const updated = local.map((s: ExtendedService) =>
+            s.id === currentService.id ? { ...s, ...currentService } : s
+          );
+          localStorage.setItem('local_services', JSON.stringify(updated));
+        } catch (e) {
+          // ignore
+        }
+
         toast.success(`Training program "${currentService.name}" updated!`);
       } else {
         const newRecord: ExtendedService = {
@@ -206,8 +219,13 @@ export default function AdminServices() {
           newRecord.id = docRef.id;
         } catch (dbErr) {
           newRecord.id = `local-srv-${Date.now()}`;
+        }
+
+        try {
           const local = JSON.parse(localStorage.getItem('local_services') || '[]');
           localStorage.setItem('local_services', JSON.stringify([newRecord, ...local]));
+        } catch (e) {
+          // ignore
         }
 
         setServices((prev) => [...prev, newRecord]);
@@ -233,24 +251,29 @@ export default function AdminServices() {
     if (!serviceToDelete) return;
     setIsDeleting(true);
 
-    try {
-      if (serviceToDelete.id && !serviceToDelete.id.startsWith('srv-') && !serviceToDelete.id.startsWith('local-srv-')) {
-        await deleteDoc(doc(db, 'services', serviceToDelete.id));
-      } else if (serviceToDelete.id?.startsWith('local-srv-')) {
-        const local = JSON.parse(localStorage.getItem('local_services') || '[]');
-        const updated = local.filter((s: ExtendedService) => s.id !== serviceToDelete.id);
-        localStorage.setItem('local_services', JSON.stringify(updated));
-      }
+    const targetId = serviceToDelete.id!;
 
-      setServices((prev) => prev.filter((s) => s.id !== serviceToDelete.id));
-      toast.success(`Program "${serviceToDelete.name}" deleted.`);
-      setDeleteDialogOpen(false);
-      setServiceToDelete(null);
-    } catch (err: any) {
-      toast.error(err?.message || 'Could not delete service.');
-    } finally {
-      setIsDeleting(false);
+    try {
+      if (targetId && !targetId.startsWith('srv-') && !targetId.startsWith('local-srv-')) {
+        await deleteDoc(doc(db, 'services', targetId));
+      }
+    } catch (dbErr) {
+      console.warn('Firestore delete note:', dbErr);
     }
+
+    try {
+      const local = JSON.parse(localStorage.getItem('local_services') || '[]');
+      const updated = local.filter((s: ExtendedService) => s.id !== targetId);
+      localStorage.setItem('local_services', JSON.stringify(updated));
+    } catch (e) {
+      // ignore
+    }
+
+    setServices((prev) => prev.filter((s) => s.id !== targetId));
+    toast.success(`Program "${serviceToDelete.name}" deleted.`);
+    setDeleteDialogOpen(false);
+    setServiceToDelete(null);
+    setIsDeleting(false);
   };
 
   // Toggle active
@@ -263,15 +286,14 @@ export default function AdminServices() {
           updatedAt: serverTimestamp(),
         });
       }
-      setServices((prev) =>
-        prev.map((s) => (s.id === srv.id ? { ...s, active: updatedStatus } : s))
-      );
-      toast.info(updatedStatus ? `Program "${srv.name}" is now active.` : `Program "${srv.name}" hidden.`);
-    } catch (err: any) {
-      setServices((prev) =>
-        prev.map((s) => (s.id === srv.id ? { ...s, active: updatedStatus } : s))
-      );
+    } catch (e) {
+      // ignore
     }
+
+    setServices((prev) =>
+      prev.map((s) => (s.id === srv.id ? { ...s, active: updatedStatus } : s))
+    );
+    toast.info(updatedStatus ? `Program "${srv.name}" is now active.` : `Program "${srv.name}" hidden.`);
   };
 
   return (

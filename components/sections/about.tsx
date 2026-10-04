@@ -12,9 +12,9 @@ export default function About() {
   ];
 
   return (
-    <section id="about" className="py-32 bg-brand-charcoal overflow-hidden relative">
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+    <section id="about" className="py-16 sm:py-24 md:py-32 bg-brand-charcoal overflow-hidden relative">
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 lg:gap-16 items-center">
           <motion.div 
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -31,16 +31,16 @@ export default function About() {
                 referrerPolicy="no-referrer"
               />
               <div className="absolute inset-0 bg-brand-green/5 group-hover:bg-brand-green/10 transition-colors duration-700" />
-              <div className="absolute inset-0 flex items-center justify-center p-12">
+              <div className="absolute inset-0 flex items-center justify-center p-6 sm:p-12">
                 <span className="font-syne font-black text-[12vw] italic text-stroke opacity-10 select-none">
                   PURE
                 </span>
               </div>
-              <div className="absolute bottom-12 left-12 right-12">
-                <div className="font-syne font-black text-4xl italic uppercase leading-none mb-2">
+              <div className="absolute bottom-6 sm:bottom-12 left-6 sm:left-12 right-6 sm:right-12">
+                <div className="font-syne font-black text-2xl sm:text-3xl md:text-4xl italic uppercase leading-none mb-2">
                   Hard <span className="text-brand-green">Work</span>.
                 </div>
-                <div className="font-syne font-black text-2xl italic uppercase text-white/40">
+                <div className="font-syne font-black text-lg sm:text-xl md:text-2xl italic uppercase text-white/40">
                   No Excuses.
                 </div>
               </div>
@@ -55,20 +55,20 @@ export default function About() {
             </div>
           </motion.div>
 
-            <div className="lg:col-span-7 lg:pl-12 space-y-12">
+          <div className="lg:col-span-7 lg:pl-12 space-y-8 sm:space-y-12">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <span className="text-brand-green text-[10px] font-semibold uppercase tracking-[0.5em] mb-6 block">
+              <span className="text-brand-green text-[10px] font-semibold uppercase tracking-[0.4em] sm:tracking-[0.5em] mb-4 sm:mb-6 block">
                 About Us
               </span>
-              <h2 className="text-5xl md:text-7xl font-syne font-bold italic uppercase tracking-tighter leading-none mb-8 text-balance">
+              <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-7xl font-syne font-bold italic uppercase tracking-tighter leading-tight sm:leading-none mb-6 sm:mb-8 text-balance">
                 Your <span className="text-brand-green">Fitness</span> Journey.
               </h2>
-              <div className="space-y-6 text-white/50 text-lg md:text-xl font-jakarta leading-relaxed max-w-2xl">
+              <div className="space-y-4 sm:space-y-6 text-white/60 text-sm sm:text-base md:text-lg font-jakarta leading-relaxed max-w-2xl">
                 <p>
                   Join Oxygen Multifit and train hard. We focus on discipline and consistent effort to help you reach your goals.
                 </p>
@@ -78,7 +78,7 @@ export default function About() {
               </div>
             </motion.div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 pt-12 border-t border-white/5">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 pt-8 sm:pt-12 border-t border-white/5">
               {stats.map((stat, index) => (
                 <motion.div 
                   key={stat.label}
@@ -87,8 +87,8 @@ export default function About() {
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
                 >
-                  <div className="font-syne font-bold italic text-3xl mb-1">{stat.value}</div>
-                  <div className="text-[10px] font-semibold uppercase tracking-widest text-brand-green/40">{stat.label}</div>
+                  <div className="font-syne font-bold italic text-2xl sm:text-3xl mb-1">{stat.value}</div>
+                  <div className="text-[9px] sm:text-[10px] font-semibold uppercase tracking-widest text-brand-green/40">{stat.label}</div>
                 </motion.div>
               ))}
             </div>

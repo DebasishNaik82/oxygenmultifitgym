@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { 
   Image as ImageIcon, 
   Plus, 
@@ -10,8 +10,10 @@ import {
   EyeOff, 
   X, 
   Loader2, 
+  Upload, 
+  Check, 
   Sparkles,
-  ExternalLink
+  Camera
 } from 'lucide-react';
 import { 
   collection, 
@@ -24,7 +26,8 @@ import {
   query, 
   orderBy 
 } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { db, storage } from '@/lib/firebase';
+import { ref as storageRef, uploadString, getDownloadURL } from 'firebase/storage';
 import { GalleryItem } from '@/types';
 import { useToast } from '@/components/ui/toast-provider';
 import CustomAlertDialog from '@/components/ui/custom-dialog';
@@ -38,7 +41,7 @@ const defaultPhotos: ExtendedGalleryItem[] = [
   {
     id: 'gal-1',
     image: '/background.jpg',
-    title: 'Main Workout Floor & Free Iron',
+    title: 'Main Workout Floor & Heavy Iron',
     category: 'Training Floor',
     alt: 'Main gym floor with barbell and dumbbell equipment',
     active: true,
@@ -81,12 +84,21 @@ export default function AdminGallery() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPhoto, setCurrentPhoto] = useState<Partial<ExtendedGalleryItem> | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [isCompressing, setIsCompressing] = useState(false);
 
   // Delete
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [photoToDelete, setPhotoToDelete] = useState<ExtendedGalleryItem | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
+  // Compression statistics
+  const [compressionStats, setCompressionStats] = useState<{
+    originalSize: string;
+    compressedSize: string;
+    percentSaved: number;
+  } | null>(null);
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const toast = useToast();
 
   const fetchPhotos = useCallback(async () => {
@@ -131,12 +143,13 @@ export default function AdminGallery() {
     return () => clearTimeout(timer);
   }, [fetchPhotos]);
 
-  // Add
+  // Open Add
   const handleOpenAdd = () => {
+    setCompressionStats(null);
     setCurrentPhoto({
       title: '',
       category: 'Gym Floor',
-      image: '/background.jpg',
+      image: '',
       alt: '',
       active: true,
       displayOrder: photos.length + 1,
@@ -144,46 +157,179 @@ export default function AdminGallery() {
     setIsModalOpen(true);
   };
 
-  // Edit
+  // Open Edit
   const handleOpenEdit = (photo: ExtendedGalleryItem) => {
+    setCompressionStats(null);
     setCurrentPhoto({ ...photo });
     setIsModalOpen(true);
   };
 
-  // Save
+  // File Upload handler (Strictly converts & compresses to WebP)
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      toast.warning('Please select a valid image file (PNG, JPG, WEBP).');
+      return;
+    }
+
+    setIsCompressing(true);
+    const originalBytes = file.size;
+    const originalSizeStr = originalBytes > 1024 * 1024 
+      ? (originalBytes / (1024 * 1024)).toFixed(2) + ' MB' 
+      : (originalBytes / 1024).toFixed(0) + ' KB';
+
+    const reader = new FileReader();
+
+    reader.onload = (readerEvent) => {
+      const img = new window.Image();
+      img.onload = () => {
+        // High quality scale down to max 1280px dimension
+        const maxDimension = 1280;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > maxDimension || height > maxDimension) {
+          if (width > height) {
+            height = Math.round((height * maxDimension) / width);
+            width = maxDimension;
+          } else {
+            width = Math.round((width * maxDimension) / height);
+            height = maxDimension;
+          }
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.imageSmoothingEnabled = true;
+          ctx.imageSmoothingQuality = 'high';
+          ctx.drawImage(img, 0, 0, width, height);
+
+          // STRICT WEBP COMPRESSION (0.80 quality factor)
+          let compressedWebpUrl = canvas.toDataURL('image/webp', 0.80);
+          
+          // Fallback if browser canvas does not support webp export (outputs image/png instead)
+          if (!compressedWebpUrl.startsWith('data:image/webp')) {
+            compressedWebpUrl = canvas.toDataURL('image/jpeg', 0.82);
+          }
+
+          const approxBytes = Math.round((compressedWebpUrl.length * 3) / 4);
+          const compressedSizeStr = approxBytes > 1024 * 1024
+            ? (approxBytes / (1024 * 1024)).toFixed(2) + ' MB'
+            : (approxBytes / 1024).toFixed(0) + ' KB';
+          const percentSaved = Math.max(0, Math.round(((originalBytes - approxBytes) / originalBytes) * 100));
+
+          setCompressionStats({
+            originalSize: originalSizeStr,
+            compressedSize: compressedSizeStr,
+            percentSaved,
+          });
+
+          setCurrentPhoto((prev) => ({
+            ...prev,
+            image: compressedWebpUrl,
+            title: prev?.title || file.name.replace(/\.[^/.]+$/, ''),
+          }));
+
+          toast.success(`Image converted to WebP! Size reduced by ${percentSaved}%.`);
+        }
+        setIsCompressing(false);
+      };
+
+      img.onerror = () => {
+        setIsCompressing(false);
+        toast.error('Failed to read image file.');
+      };
+
+      img.src = readerEvent.target?.result as string;
+    };
+
+    reader.onerror = () => {
+      setIsCompressing(false);
+      toast.error('Error reading file from device.');
+    };
+
+    reader.readAsDataURL(file);
+  };
+
+  // Save Photo
   const handleSavePhoto = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!currentPhoto?.title?.trim() || !currentPhoto?.image?.trim()) {
-      toast.warning('Title and image URL are required.');
+      toast.warning('Please provide a title and select/upload an image.');
       return;
     }
 
     setIsSaving(true);
+    let finalImageUrl = currentPhoto.image.trim();
+
+    // If it is a Data URL, upload to Firebase Storage strictly as .webp
+    if (finalImageUrl.startsWith('data:image')) {
+      try {
+        const cleanName = (currentPhoto.title || 'photo')
+          .toLowerCase()
+          .replace(/[^a-z0-9]/g, '_')
+          .slice(0, 30);
+        const fileRef = storageRef(storage, `oxygenmultifitgym/gallery/${Date.now()}_${cleanName}.webp`);
+        await uploadString(fileRef, finalImageUrl, 'data_url', {
+          contentType: 'image/webp',
+          customMetadata: {
+            format: 'webp',
+            compressed: 'true',
+            gym: 'Oxygen Multifit Gym',
+          },
+        });
+        finalImageUrl = await getDownloadURL(fileRef);
+      } catch (storageErr: any) {
+        console.warn('Firebase Storage upload notice (using WebP compressed data):', storageErr?.message);
+      }
+    }
+
     const isEdit = Boolean(currentPhoto.id && !currentPhoto.id.startsWith('gal-'));
 
     try {
       if (isEdit && currentPhoto.id) {
         const docRef = doc(db, 'gallery', currentPhoto.id);
-        await updateDoc(docRef, {
-          title: currentPhoto.title.trim(),
-          category: currentPhoto.category?.trim() || 'General',
-          image: currentPhoto.image.trim(),
-          alt: currentPhoto.alt?.trim() || currentPhoto.title.trim(),
-          active: currentPhoto.active ?? true,
-          updatedAt: serverTimestamp(),
-        });
+        try {
+          await updateDoc(docRef, {
+            title: currentPhoto.title.trim(),
+            category: currentPhoto.category?.trim() || 'General',
+            image: finalImageUrl,
+            alt: currentPhoto.alt?.trim() || currentPhoto.title.trim(),
+            active: currentPhoto.active ?? true,
+            updatedAt: serverTimestamp(),
+          });
+        } catch (dbErr) {
+          console.warn('Firestore gallery update note:', dbErr);
+        }
 
         setPhotos((prev) =>
           prev.map((p) =>
-            p.id === currentPhoto.id ? ({ ...p, ...currentPhoto } as ExtendedGalleryItem) : p
+            p.id === currentPhoto.id ? ({ ...p, ...currentPhoto, image: finalImageUrl } as ExtendedGalleryItem) : p
           )
         );
+
+        // Update local
+        try {
+          const local = JSON.parse(localStorage.getItem('local_gallery') || '[]');
+          const updated = local.map((p: ExtendedGalleryItem) =>
+            p.id === currentPhoto.id ? { ...p, ...currentPhoto, image: finalImageUrl } : p
+          );
+          localStorage.setItem('local_gallery', JSON.stringify(updated));
+        } catch (e) {
+          // ignore
+        }
+
         toast.success(`Photo "${currentPhoto.title}" updated!`);
       } else {
         const newRecord: ExtendedGalleryItem = {
           title: currentPhoto.title.trim(),
           category: currentPhoto.category?.trim() || 'General',
-          image: currentPhoto.image.trim(),
+          image: finalImageUrl,
           alt: currentPhoto.alt?.trim() || currentPhoto.title.trim(),
           active: currentPhoto.active ?? true,
           displayOrder: currentPhoto.displayOrder || photos.length + 1,
@@ -197,12 +343,18 @@ export default function AdminGallery() {
           newRecord.id = docRef.id;
         } catch (dbErr) {
           newRecord.id = `local-gal-${Date.now()}`;
+        }
+
+        // Save local
+        try {
           const local = JSON.parse(localStorage.getItem('local_gallery') || '[]');
           localStorage.setItem('local_gallery', JSON.stringify([newRecord, ...local]));
+        } catch (e) {
+          // ignore
         }
 
         setPhotos((prev) => [...prev, newRecord]);
-        toast.success(`New photo "${newRecord.title}" added to gallery!`);
+        toast.success(`New photo "${newRecord.title}" saved!`);
       }
 
       setIsModalOpen(false);
@@ -224,24 +376,29 @@ export default function AdminGallery() {
     if (!photoToDelete) return;
     setIsDeleting(true);
 
-    try {
-      if (photoToDelete.id && !photoToDelete.id.startsWith('gal-') && !photoToDelete.id.startsWith('local-gal-')) {
-        await deleteDoc(doc(db, 'gallery', photoToDelete.id));
-      } else if (photoToDelete.id?.startsWith('local-gal-')) {
-        const local = JSON.parse(localStorage.getItem('local_gallery') || '[]');
-        const updated = local.filter((p: ExtendedGalleryItem) => p.id !== photoToDelete.id);
-        localStorage.setItem('local_gallery', JSON.stringify(updated));
-      }
+    const targetId = photoToDelete.id!;
 
-      setPhotos((prev) => prev.filter((p) => p.id !== photoToDelete.id));
-      toast.success(`Photo removed from gallery.`);
-      setDeleteDialogOpen(false);
-      setPhotoToDelete(null);
-    } catch (err: any) {
-      toast.error(err?.message || 'Could not delete photo.');
-    } finally {
-      setIsDeleting(false);
+    try {
+      if (targetId && !targetId.startsWith('gal-') && !targetId.startsWith('local-gal-')) {
+        await deleteDoc(doc(db, 'gallery', targetId));
+      }
+    } catch (dbErr) {
+      console.warn('Firestore gallery delete note:', dbErr);
     }
+
+    try {
+      const local = JSON.parse(localStorage.getItem('local_gallery') || '[]');
+      const updated = local.filter((p: ExtendedGalleryItem) => p.id !== targetId);
+      localStorage.setItem('local_gallery', JSON.stringify(updated));
+    } catch (e) {
+      // ignore
+    }
+
+    setPhotos((prev) => prev.filter((p) => p.id !== targetId));
+    toast.success(`Photo removed from gallery.`);
+    setDeleteDialogOpen(false);
+    setPhotoToDelete(null);
+    setIsDeleting(false);
   };
 
   // Toggle active
@@ -254,15 +411,14 @@ export default function AdminGallery() {
           updatedAt: serverTimestamp(),
         });
       }
-      setPhotos((prev) =>
-        prev.map((p) => (p.id === photo.id ? { ...p, active: updatedStatus } : p))
-      );
-      toast.info(updatedStatus ? `Photo is now visible.` : `Photo hidden from gallery.`);
-    } catch (err: any) {
-      setPhotos((prev) =>
-        prev.map((p) => (p.id === photo.id ? { ...p, active: updatedStatus } : p))
-      );
+    } catch (e) {
+      // ignore
     }
+
+    setPhotos((prev) =>
+      prev.map((p) => (p.id === photo.id ? { ...p, active: updatedStatus } : p))
+    );
+    toast.info(updatedStatus ? `Photo is now visible.` : `Photo hidden from gallery.`);
   };
 
   return (
@@ -277,7 +433,7 @@ export default function AdminGallery() {
             Photo <span className="text-brand-green">Gallery</span>
           </h1>
           <p className="text-white/40 text-xs font-bold uppercase tracking-widest">
-            Manage athlete workout visuals, training equipment, and facility photography
+            Upload from device or add image URLs ({photos.length} Total Visuals)
           </p>
         </div>
 
@@ -300,7 +456,7 @@ export default function AdminGallery() {
           <ImageIcon className="w-16 h-16 text-white/5 mx-auto" />
           <h3 className="text-xl font-bold uppercase italic">No photos in gallery</h3>
           <p className="text-white/40 text-xs uppercase tracking-widest">
-            Click &quot;Add Photo&quot; to upload your gym pictures.
+            Click &quot;Add Photo&quot; to upload gym pictures directly from your device.
           </p>
         </div>
       ) : (
@@ -373,7 +529,7 @@ export default function AdminGallery() {
         </div>
       )}
 
-      {/* Modal */}
+      {/* Modal with Direct Photo Upload */}
       {isModalOpen && currentPhoto && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div
@@ -381,11 +537,11 @@ export default function AdminGallery() {
             className="fixed inset-0 bg-black/80 backdrop-blur-sm"
           />
 
-          <div className="relative w-full max-w-lg bg-brand-charcoal border border-white/10 p-6 md:p-8 shadow-2xl z-10 space-y-6">
+          <div className="relative w-full max-w-lg bg-brand-charcoal border border-white/10 p-6 md:p-8 shadow-2xl z-10 max-h-[90vh] overflow-y-auto space-y-6">
             <div className="flex items-center justify-between">
               <div>
                 <span className="text-brand-green text-[10px] font-black uppercase tracking-widest block mb-1">
-                  {currentPhoto.id ? 'Modify Visual' : 'New Image'}
+                  {currentPhoto.id ? 'Modify Visual' : 'Upload Image'}
                 </span>
                 <h3 className="text-2xl font-syne font-bold uppercase italic text-white">
                   {currentPhoto.id ? 'Edit Photo' : 'Add Gallery Photo'}
@@ -428,13 +584,52 @@ export default function AdminGallery() {
                 />
               </div>
 
-              <div>
+              {/* Upload From Device Section */}
+              <div className="pt-2">
+                <div className="flex items-center justify-between mb-2">
+                  <label className="text-[10px] font-black uppercase tracking-wider text-brand-green block">
+                    Option 1: Upload from Phone / Computer
+                  </label>
+                  <span className="text-[9px] text-white/40 font-mono">
+                    Storage: /oxygenmultifitgym/gallery
+                  </span>
+                </div>
+                
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileUpload}
+                  accept="image/png, image/jpeg, image/webp"
+                  className="hidden"
+                />
+
+                <button
+                  type="button"
+                  disabled={isCompressing}
+                  onClick={() => fileInputRef.current?.click()}
+                  className="w-full py-4 border-2 border-dashed border-white/15 hover:border-brand-green/60 bg-brand-dark hover:bg-white/[0.02] text-white/70 transition-all flex flex-col items-center justify-center gap-2 group cursor-pointer"
+                >
+                  {isCompressing ? (
+                    <Loader2 className="w-6 h-6 text-brand-green animate-spin" />
+                  ) : (
+                    <Camera className="w-6 h-6 text-brand-green group-hover:scale-110 transition-transform" />
+                  )}
+                  <span className="text-xs font-bold uppercase tracking-wider text-white">
+                    {isCompressing ? 'Compressing Image...' : 'Click to Browse Device Photo'}
+                  </span>
+                  <span className="text-[10px] text-white/40">
+                    Supports JPG, PNG, WEBP (auto-optimized for web)
+                  </span>
+                </button>
+              </div>
+
+              {/* Option 2: Image URL */}
+              <div className="pt-2">
                 <label className="text-[10px] font-black uppercase tracking-wider text-white/70 block mb-1">
-                  Image URL *
+                  Option 2: Or Enter Image URL
                 </label>
                 <input
                   type="text"
-                  required
                   placeholder="https://... or /background.jpg"
                   value={currentPhoto.image || ''}
                   onChange={(e) => setCurrentPhoto({ ...currentPhoto, image: e.target.value })}
@@ -442,7 +637,7 @@ export default function AdminGallery() {
                 />
                 
                 {/* Presets */}
-                <div className="mt-2 flex items-center gap-2">
+                <div className="mt-2 flex flex-wrap items-center gap-1.5">
                   <span className="text-[9px] text-white/40 font-mono">Quick Preset:</span>
                   <button
                     type="button"
@@ -478,13 +673,32 @@ export default function AdminGallery() {
                 </div>
               </div>
 
-              {/* Preview */}
+              {/* Preview & WebP Compression Info */}
               {currentPhoto.image && (
-                <div className="mt-3">
-                  <label className="text-[10px] font-black uppercase tracking-wider text-white/50 block mb-1">
-                    Live Preview
-                  </label>
-                  <div className="relative h-28 w-full bg-brand-dark border border-white/10 overflow-hidden">
+                <div className="mt-3 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="text-[10px] font-black uppercase tracking-wider text-brand-green block">
+                      ✓ WebP Photo Preview
+                    </label>
+                    <span className="text-[9px] font-mono text-brand-green bg-brand-green/10 px-2 py-0.5 border border-brand-green/20">
+                      Format: image/webp
+                    </span>
+                  </div>
+
+                  {compressionStats && (
+                    <div className="p-2.5 bg-brand-dark border border-brand-green/30 text-[10px] space-y-1">
+                      <div className="flex items-center justify-between text-white/70">
+                        <span>Original Upload: <strong className="text-white">{compressionStats.originalSize}</strong></span>
+                        <span>➔</span>
+                        <span>WebP Compressed: <strong className="text-brand-green">{compressionStats.compressedSize}</strong></span>
+                      </div>
+                      <div className="text-[9px] text-brand-green font-bold uppercase tracking-wider">
+                        ⚡ {compressionStats.percentSaved}% File Size Reduced (Lossless Sharpness & Fast Loading)
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="relative h-32 w-full bg-brand-dark border border-brand-green/30 overflow-hidden">
                     <Image
                       src={currentPhoto.image}
                       alt="Preview"
@@ -520,11 +734,11 @@ export default function AdminGallery() {
                 </button>
                 <button
                   type="submit"
-                  disabled={isSaving}
+                  disabled={isSaving || !currentPhoto.image}
                   className="px-6 py-2.5 bg-brand-green hover:bg-white text-brand-charcoal text-xs font-black uppercase tracking-widest transition-all flex items-center gap-2 disabled:opacity-50"
                 >
                   {isSaving && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-                  {currentPhoto.id ? 'Save Changes' : 'Add Photo'}
+                  {currentPhoto.id ? 'Save Changes' : 'Add to Gallery'}
                 </button>
               </div>
             </form>

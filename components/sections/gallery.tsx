@@ -11,18 +11,18 @@ const gymPhotos = [
 
 export default function Gallery() {
   return (
-    <section id="gallery" className="py-32 bg-brand-charcoal overflow-hidden border-t border-white/5">
-      <div className="container mx-auto px-6">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-24 gap-12">
+    <section id="gallery" className="py-16 sm:py-24 md:py-32 bg-brand-charcoal overflow-hidden border-t border-white/5">
+      <div className="container mx-auto px-4 sm:px-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 sm:mb-16 md:mb-24 gap-6 sm:gap-12">
           <div className="max-w-xl">
-            <span className="text-brand-green text-[10px] font-black uppercase tracking-[0.5em] mb-6 block">
+            <span className="text-brand-green text-[10px] font-black uppercase tracking-[0.4em] sm:tracking-[0.5em] mb-4 sm:mb-6 block">
               Visuals
             </span>
-            <h2 className="text-5xl md:text-7xl font-syne font-black italic uppercase tracking-tighter leading-none mb-8">
+            <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-7xl font-syne font-black italic uppercase tracking-tighter leading-tight sm:leading-none mb-4 sm:mb-8">
               The <span className="text-brand-green">Experience</span>
             </h2>
           </div>
-          <p className="text-white/40 text-sm uppercase tracking-widest font-bold font-jakarta max-w-[200px] border-l border-brand-green pl-6 mb-6">
+          <p className="text-white/40 text-xs sm:text-sm uppercase tracking-widest font-bold font-jakarta max-w-[200px] border-l border-brand-green pl-4 sm:pl-6 mb-4 sm:mb-6">
             A virtual tour of Bhawanipatna&apos;s elite facility.
           </p>
         </div>
